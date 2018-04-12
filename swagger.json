@@ -1,0 +1,372 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is an API.PTAH service specification.\nYou can find more here [<<website>>].\n",
+    "version" : "1.0.0",
+    "title" : "API.PTAH",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "medoc.buff@gmail.com"
+    },
+    "license" : {
+      "name" : "License Name info",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "svc",
+    "description" : "Additional functions"
+  }, {
+    "name" : "gov",
+    "description" : "Register documents at GOV"
+  }, {
+    "name" : "govrk",
+    "description" : "Send docs to contragents via GOV RK server"
+  }, {
+    "name" : "ptn",
+    "description" : "Send docs to contragents via GOV RK server"
+  } ],
+  "paths" : {
+    "/svc/version" : {
+      "post" : {
+        "tags" : [ "svc" ],
+        "summary" : "Send document to contragent via GOV RK server",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/govrk/send" : {
+      "post" : {
+        "tags" : [ "govrk" ],
+        "summary" : "Send document to contragent via GOV RK server",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Send",
+          "description" : "To send documents to contragents via GOV RK",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/govrksend"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/responseFilename"
+            }
+          }
+        }
+      }
+    },
+    "/govrk/rcv" : {
+      "post" : {
+        "tags" : [ "govrk" ],
+        "summary" : "Receiving documents from GOV RK server",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Receive",
+          "description" : "To get docs from GOV RK",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/govrkrcv"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/responseGovrk"
+            }
+          }
+        }
+      }
+    },
+    "/govrk/del" : {
+      "post" : {
+        "tags" : [ "govrk" ],
+        "summary" : "Deleting documents from GOV RK server",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Delete",
+          "description" : "To delete docs from GOV RK",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/govrkdel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "$ref" : "#/definitions/standardResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "petstore_auth" : {
+      "type" : "oauth2",
+      "authorizationUrl" : "http://petstore.swagger.io/oauth/dialog",
+      "flow" : "implicit",
+      "scopes" : {
+        "write:pets" : "modify pets in your account",
+        "read:pets" : "read your pets"
+      }
+    },
+    "api_key" : {
+      "type" : "apiKey",
+      "name" : "api_key",
+      "in" : "header"
+    }
+  },
+  "definitions" : {
+    "govrksend" : {
+      "type" : "object",
+      "required" : [ "Edrpou", "RcvEdrpou", "Body", "Cert", "Key", "Password" ],
+      "properties" : {
+        "Edrpou" : {
+          "type" : "string"
+        },
+        "Dept" : {
+          "type" : "integer"
+        },
+        "RcvEdrpou" : {
+          "type" : "string"
+        },
+        "RcvDept" : {
+          "type" : "integer"
+        },
+        "Body" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Cert" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Key" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Password" : {
+          "type" : "integer"
+        }
+      },
+      "example" : {
+        "Edrpou" : 66633555,
+        "Dept" : 4,
+        "RcvEdrpou" : 77778899,
+        "RcvDept" : 5,
+        "Body" : "Signed BODY document base64 encode",
+        "Cert" : "cert base64 encode",
+        "Key" : "key base64 encode",
+        "Password" : 111
+      }
+    },
+    "govrkrcv" : {
+      "type" : "object",
+      "required" : [ "Edrpou", "Body", "Cert", "Key", "Password" ],
+      "properties" : {
+        "Edrpou" : {
+          "type" : "string"
+        },
+        "Dept" : {
+          "type" : "integer"
+        },
+        "Body" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Cert" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Key" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Password" : {
+          "type" : "integer"
+        }
+      },
+      "example" : {
+        "Edrpou" : 66633555,
+        "Dept" : null,
+        "Body" : "Signed BODY document base64 encode",
+        "Cert" : "cert base64 encode",
+        "Key" : "key base64 encode",
+        "Password" : 111
+      }
+    },
+    "govrkdel" : {
+      "type" : "object",
+      "required" : [ "GateId", "Filename", "Ticket", "Cert", "Key", "Password" ],
+      "properties" : {
+        "GateId" : {
+          "type" : "string"
+        },
+        "Filename" : {
+          "type" : "string"
+        },
+        "Ticket" : {
+          "type" : "string"
+        },
+        "Cert" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Key" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Password" : {
+          "type" : "integer"
+        }
+      },
+      "example" : {
+        "GateId" : null,
+        "Filename" : null,
+        "Ticket" : null,
+        "Cert" : null,
+        "Key" : null,
+        "Password" : null
+      }
+    },
+    "standardResponse" : {
+      "type" : "object",
+      "required" : [ "Code", "Message" ],
+      "properties" : {
+        "Filename" : {
+          "type" : "string"
+        },
+        "Code" : {
+          "type" : "integer"
+        },
+        "Message" : {
+          "type" : "string"
+        }
+      },
+      "example" : {
+        "Code" : 0,
+        "Message" : null
+      }
+    },
+    "responseFilename" : {
+      "type" : "object",
+      "required" : [ "Filename", "Code", "Message" ],
+      "properties" : {
+        "Filename" : {
+          "type" : "string"
+        },
+        "Code" : {
+          "type" : "integer"
+        },
+        "Message" : {
+          "type" : "string"
+        }
+      },
+      "example" : {
+        "Filename" : "15080077778899J1201009100000000110120181508.XML",
+        "Code" : 0,
+        "Message" : null
+      }
+    },
+    "responseGovrk" : {
+      "type" : "object",
+      "required" : [ "Code", "Message", "HasMore", "Docs" ],
+      "properties" : {
+        "Code" : {
+          "type" : "integer"
+        },
+        "Message" : {
+          "type" : "string"
+        },
+        "HasMore" : {
+          "type" : "boolean"
+        },
+        "Docs" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/responseDocs"
+          }
+        }
+      },
+      "example" : {
+        "Code" : 0,
+        "Message" : null,
+        "HasMore" : true,
+        "Docs" : {
+          "GateId" : 36278737373737377373,
+          "Body" : null,
+          "Text" : null,
+          "Ticket" : null,
+          "Signers" : null,
+          "Filename" : null,
+          "Edrpou" : null,
+          "RcvEdrpou" : null
+        }
+      }
+    },
+    "responseDocs" : {
+      "type" : "object",
+      "required" : [ "GateId", "Body", "Text", "Ticket", "Signers", "Filename", "Edrpou", "RcvEdrpou" ],
+      "properties" : {
+        "GateId" : {
+          "type" : "string"
+        },
+        "Body" : {
+          "type" : "string",
+          "format" : "byte"
+        },
+        "Text" : {
+          "type" : "string"
+        },
+        "Ticket" : {
+          "type" : "string"
+        },
+        "Signers" : {
+          "type" : "string"
+        },
+        "Filename" : {
+          "type" : "string"
+        },
+        "Edrpou" : {
+          "type" : "string"
+        },
+        "RcvEdrpou" : {
+          "type" : "string"
+        }
+      },
+      "example" : {
+        "GateId" : 36278737373737377373,
+        "Body" : "doc body base64 encode",
+        "Text" : "body message not signed",
+        "Ticket" : "delivery kvt",
+        "Signers" : "info about signers",
+        "Filename" : null,
+        "Edrpou" : null,
+        "RcvEdrpou" : null
+      }
+    }
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/yevopa/APIPtah/1.0.0",
+  "schemes" : [ "https", "http" ]
+}
